@@ -1,0 +1,72 @@
+#服务启动端口号
+server:
+  port: 8081
+#eureka配置
+eureka:
+  client:
+    #是否需要从注册中心获取信息
+    fetch-registry: true
+    #需要注册服务到服务中心
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://62.234.109.11:8100/eureka
+
+#日志配置
+logging:
+  config: classpath:log4j2-spring.xml
+
+#spring相关配置
+spring:
+  application:
+    #服务名字（注册到注册中心）
+    name: consumer
+  #redis配置
+  redis:
+    database: 0
+    host: 39.108.107.163
+    password: 123456
+    port: 6379
+    timeout: 5000
+
+#feign客户端配置
+feign:
+  hystrix:
+    #设置feign开启hystrix(服务保护）
+    enabled: true
+
+#ribbon配置
+ribbon:
+  #ribbon的超时时间要大于hystrix的超时时间，否则 hystrix自定义的超时时间毫无意义
+  ReadTimeout: 5000
+  ConnectTimeout: 5000
+
+#hystrix配置
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            #feign整合hystrix 光设置Hystrix 超时没用的要配合ribbon超时
+            timeoutInMilliseconds: 3000
+      circuitBreaker:
+        #默认20 ，熔断的阈值，如何user服务报错满足3次，熔断器就会打开，就算order之后请求正确的数据也不行。
+        requestVolumeThreshold: 3
+        #默认5S ， 等5S之后熔断器会处于半开状态，然后下一次请求的正确和错误讲决定熔断器是否真的关闭和是否继续打开
+        sleepWindowInMilliseconds: 8000
+
+
+#分布式任务调度中心xxl-job配置
+xxl:
+  job:
+    accessToken:
+    admin:
+      #调度平台地址
+      addresses: http://62.234.109.11:8090/xxl-job-admin
+    executor:
+      #执行器名字
+      appname: xxl-job-executor-sample
+      ip:
+      logpath: /data/applogs/xxl-job/jobhandler
+      logretentiondays: -1
+      port: 9998

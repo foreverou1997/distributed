@@ -77,7 +77,7 @@
         <dependency>
             <groupId>com.xuxueli</groupId>
             <artifactId>xxl-job-core</artifactId>
-            <version>2.1.0</version>
+            <version>2.3.1</version>
         </dependency>
 
         <!--阿里数据库连接池依赖     -->
